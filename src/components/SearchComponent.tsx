@@ -18,15 +18,14 @@ export default function Search() {
   const [query] = useDebounce(text, 500);
 
   const handleOpen = () => {
-    setOpen(!open);
+    setOpen(prev => !prev);
   };
 
   useEffect(() => {
     if (params.id) return;
     if (query === search) return;
     if (!query && page) router.push(`/gallery?page=${page}`);
-    if (query && page) router.push(`/gallery?page=${page}&search=${query}`);
-    if (query && !page) router.push(`/gallery?page=1&search=${query}`);
+    if (query) router.push(`/gallery?page=1&search=${query}`);
   }, [params.id, page, query, router, search]);
 
   return (
