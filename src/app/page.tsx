@@ -1,10 +1,7 @@
 export default function Home() {
   return (
-    <>
-      Lorem ipsum dolor sit amet consectetur, adipisicing elit. Qui quae, sed
-      nesciunt vitae molestias deserunt, magni nihil molestiae voluptas
-      laboriosam quos! Sequi recusandae earum molestiae nesciunt mollitia
-      aspernatur voluptas vero.
-    </>
+    <div className='container mx-auto'>
+      <h1 className='text-center'>Home</h1>
+    </div>
   );
 }
