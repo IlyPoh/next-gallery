@@ -1,4 +1,8 @@
-@import './base/config';
 @import './base/extends';
 @import './base/mixins';
 @import './base/globals';
+
+@import './components/modal';
+@import './components/search';
+
+@import './fonts/icons';

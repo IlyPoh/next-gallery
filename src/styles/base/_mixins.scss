@@ -1,0 +1,152 @@
+// display
+@mixin display_flex(
+  $flex: null,
+  $align: null,
+  $justify: null,
+  $direction: null,
+  $gap: null,
+  $column-gap: null,
+  $row-gap: null,
+  $wrap: null
+) {
+  @if ($flex == inline-flex) {
+    @extend %display_inline_flex;
+  } @else {
+    @extend %display_flex;
+  }
+
+  @if ($align) {
+    align-items: $align;
+  }
+
+  @if ($justify) {
+    justify-content: $justify;
+  }
+
+  @if ($direction) {
+    flex-direction: $direction;
+  }
+
+  @if ($gap) {
+    gap: $gap;
+  }
+
+  @if ($column-gap) {
+    column-gap: $column-gap;
+  }
+
+  @if ($row-gap) {
+    row-gap: $row-gap;
+  }
+
+  @if ($wrap) {
+    flex-wrap: $wrap;
+  }
+
+  @content;
+}
+
+@mixin display_grid(
+  $columns: 1,
+  $gap: null,
+  $align: null,
+  $justify: null,
+  $column-gap: null,
+  $row-gap: null
+) {
+  @extend %display_grid;
+  grid-template-columns: repeat($columns, 1fr);
+
+  @if ($gap) {
+    grid-gap: $gap;
+  }
+
+  @if ($align) {
+    align-items: $align;
+  }
+
+  @if ($justify) {
+    justify-content: $justify;
+  }
+
+  @if ($column-gap) {
+    column-gap: $column-gap;
+  }
+
+  @if ($row-gap) {
+    row-gap: $row-gap;
+  }
+
+  @content;
+}
+
+// media
+@mixin tablet {
+  @media (min-width: rems(768)) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: rems(1024)) {
+    @content;
+  }
+}
+
+@mixin desktop-hr {
+  @media (min-width: rems(1440)) {
+    @content;
+  }
+}
+
+// fades
+@mixin fadeEffect(
+  $position,
+  $width: null,
+  $height: null,
+  $color: $color-white
+) {
+  content: '';
+  position: absolute;
+  z-index: 3;
+
+  @if ($position == top) {
+    top: 0;
+    left: 0;
+    right: 0;
+
+    @if ($height) {
+      height: $height;
+    }
+  } @else if ($position == bottom) {
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    @if ($height) {
+      height: $height;
+    }
+  } @else if ($position == right) {
+    top: 0;
+    bottom: 0;
+    right: 0;
+
+    @if ($width) {
+      width: $width;
+    }
+  } @else if ($position == left) {
+    top: 0;
+    bottom: 0;
+    left: 0;
+
+    @if ($width) {
+      width: $width;
+    }
+  }
+
+  background: linear-gradient(
+    to $position,
+    rgba($color, 0) 0%,
+    rgba($color, 1) 100%
+  );
+}
