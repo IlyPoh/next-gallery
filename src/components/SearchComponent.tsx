@@ -18,7 +18,7 @@ export default function Search() {
   const [query] = useDebounce(text, 500);
 
   const handleOpen = () => {
-    setOpen(!open);
+    setOpen(prev => !prev);
   };
 
   useEffect(() => {

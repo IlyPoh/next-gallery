@@ -21,9 +21,13 @@ export default async function GalleryPage({
         <h1 className='text-center'>Gallery</h1>
         <SearchComponent />
       </div>
-      <section className='grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 mb-6'>
-        {images?.map(image => GalleryItem(image))}
-      </section>
+      {images.length !== 0 ? (
+        <section className='grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 mb-6'>
+          {images.map(image => GalleryItem(image))}
+        </section>
+      ) : (
+        <div className='text-center font-bold text-4xl'>No images found</div>
+      )}
       <section className='flex items-center justify-center mb-6 gap-4 font-bold'>
         <Pagination currentPage={currentPage} totalPages={totalPages} />
       </section>

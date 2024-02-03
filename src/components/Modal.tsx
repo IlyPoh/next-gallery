@@ -1,8 +1,9 @@
 'use client';
-import Link from 'next/link';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+
+import ZoomLink from '@/components/ZoomLink';
 
 import { TImage } from '@/types';
 
@@ -52,13 +53,7 @@ export default function Modal({ image }: TModalProps) {
           priority
           onLoad={handleImageLoad}
         />
-        <Link
-          href={imageSrc}
-          className='absolute top-2 right-2 bg-black bg-opacity-70 p-2 flex items-center justify-center rounded-xl'
-          target='_blank'
-        >
-          <i className='icon-search'></i>
-        </Link>
+        <ZoomLink src={imageSrc} />
         <div className='flex flex-col text-center max-w-[1000px] w-full'>
           <h1 className='text-center font-bold m-4'>{title}</h1>
         </div>

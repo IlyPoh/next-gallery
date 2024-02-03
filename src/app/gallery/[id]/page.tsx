@@ -1,6 +1,8 @@
 import { type Metadata } from 'next';
 import Image from 'next/image';
 
+import ZoomLink from '@/components/ZoomLink';
+
 import { getImageById } from '@/utils/helpers';
 
 export const generateMetadata = async ({
@@ -30,15 +32,18 @@ export default async function GalleryItemPage({
   return (
     <div className='container mx-auto py-8'>
       <div className='w-full flex items-center flex-col gap-4'>
-        <Image
-          alt={title}
-          src={imageSrc}
-          className='max-w-[1000px] w-full h-auto'
-          width={1000}
-          height={1000}
-          priority
-          quality={100}
-        />
+        <div className='relative'>
+          <Image
+            alt={title}
+            src={imageSrc}
+            className='max-w-[1000px] w-full h-auto'
+            width={1000}
+            height={1000}
+            priority
+            quality={100}
+          />
+          <ZoomLink src={imageSrc} />
+        </div>
         <div className='flex flex-col gap-2 text-center'>
           <h1 className='text-center font-bold'>{title}</h1>
         </div>
