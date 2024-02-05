@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export default function zoomLink({ src }: { src: string }) {
+export default function ZoomLink({ src }: { readonly src: string }) {
   return (
     <Link
       href={src}
