@@ -6,14 +6,14 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
 export default function Search() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const params = useParams();
+  const searchParams = useSearchParams();
 
   const page = searchParams.get('page');
   const search = searchParams.get('search');
 
-  const [text, setText] = useState(search ?? '');
   const [open, setOpen] = useState(false);
+  const [text, setText] = useState(search ?? '');
 
   const [query] = useDebounce(text, 500);
 

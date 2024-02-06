@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-import { env } from 'process';
 import { TImage } from '@/types';
 
 type TGetImagesProps = {
@@ -26,7 +25,7 @@ export async function getImages({
 
     const query = queryArray.join('');
 
-    const { data } = await axios.get(`${env.SITE_URL}/api/gallery${query}`);
+    const { data } = await axios.get(`/api/gallery${query}`);
 
     return data as TGetImagesProps;
   } catch (error) {
@@ -41,7 +40,7 @@ export async function getImages({
 
 export async function getImageById(id: string) {
   try {
-    const { data } = await axios.get(`${env.SITE_URL}/api/gallery/${id}`);
+    const { data } = await axios.get(`/api/gallery/${id}`);
 
     return data as TImage;
   } catch (error) {

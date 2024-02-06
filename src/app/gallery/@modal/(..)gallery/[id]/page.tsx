@@ -1,15 +1,9 @@
-import Modal from '@/components/Modal';
+import ModalForImage from '@/components/ModalForImage';
 
-import { getImageById } from '@/utils/helpers';
-
-export default async function ModalGalleryItemPage({
+export default function ModalGalleryItemPage({
   params: { id },
 }: {
   readonly params: { id: string };
 }) {
-  const image = await getImageById(id);
-
-  if (!image) return null;
-
-  return <Modal image={image} />;
+  return <ModalForImage id={id} />;
 }
