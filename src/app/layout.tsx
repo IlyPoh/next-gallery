@@ -3,6 +3,8 @@ import type { Metadata, Viewport } from 'next';
 
 import Header from '@/components/Header';
 
+import Provider from '@/utils/Provider';
+
 import '@/styles/app.scss';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -28,8 +30,10 @@ export default function RootLayout({
   return (
     <html lang='en' className='h-full'>
       <body className={`h-full flex flex-col bg-black ${inter.className}`}>
-        <Header />
-        <main>{children}</main>
+        <Provider>
+          <Header />
+          <main>{children}</main>
+        </Provider>
       </body>
     </html>
   );
