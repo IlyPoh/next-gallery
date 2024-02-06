@@ -1,29 +1,23 @@
-import { type Metadata } from 'next';
+'use client';
+
 import Image from 'next/image';
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 import ZoomLink from '@/components/ZoomLink';
 
 import { getImageById } from '@/utils/helpers';
 
-export const generateMetadata = async ({
-  params: { id },
-}: {
-  readonly params: { id: string };
-}): Promise<Metadata> => {
-  const image = await getImageById(id);
-
-  return {
-    title: image?.title ?? 'Gallery item',
-    description: image?.title ?? 'Gallery item',
-  };
-};
-
-export default async function GalleryItemPage({
+export default function GalleryItemPage({
   params: { id },
 }: {
   readonly params: { id: string };
 }) {
-  const image = await getImageById(id);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const { data: image } = useQuery({
+    queryKey: ['image', id],
+    queryFn: () => getImageById(id),
+  });
 
   if (!image) return null;
 
@@ -36,16 +30,23 @@ export default async function GalleryItemPage({
           <Image
             alt={title}
             src={imageSrc}
-            className='max-w-[1000px] w-full h-auto'
+            className={`${!imageLoaded && 'skeleton'} w-full h-auto rounded-xl`}
             width={1000}
             height={1000}
             priority
             quality={100}
+            onLoad={() => setImageLoaded(true)}
           />
-          <ZoomLink src={imageSrc} />
+          {imageLoaded && <ZoomLink src={imageSrc} />}
         </div>
         <div className='flex flex-col gap-2 text-center'>
-          <h1 className='text-center font-bold'>{title}</h1>
+          <h1
+            className={`text-center font-bold ${
+              !imageLoaded && 'skeleton block text-transparent rounded-xl'
+            }`}
+          >
+            {title}
+          </h1>
         </div>
       </div>
     </div>

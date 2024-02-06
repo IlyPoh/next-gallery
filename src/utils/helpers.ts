@@ -1,14 +1,11 @@
 import axios from 'axios';
 
-import { env } from 'process';
 import { TImage } from '@/types';
 
 type TGetImagesProps = {
   images: TImage[];
   totalPages: number;
 };
-
-const { SITE_URL } = env;
 
 export async function getImages({
   page,
@@ -43,7 +40,7 @@ export async function getImages({
 
 export async function getImageById(id: string) {
   try {
-    const { data } = await axios.get(`${SITE_URL}/api/gallery/${id}`);
+    const { data } = await axios.get(`/api/gallery/${id}`);
 
     return data as TImage;
   } catch (error) {
