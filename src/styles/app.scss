@@ -2,9 +2,10 @@
 @import './base/mixins';
 @import './base/globals';
 
+@import './components/header-profile';
+@import './components/loading-spinner';
 @import './components/modal';
 @import './components/search';
 @import './components/skeleton-loading';
-@import './components/loading-spinner';
 
 @import './fonts/icons';

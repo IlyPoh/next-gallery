@@ -1,5 +1,5 @@
-import type { Config } from 'tailwindcss';
 import colors from 'tailwindcss/colors';
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
@@ -12,6 +12,12 @@ const config: Config = {
       textColor: {
         primary: colors.pink[500],
         secondary: colors.gray[500],
+      },
+      backgroundColor: {
+        primary: colors.pink[500],
+      },
+      borderColor: {
+        primary: colors.pink[500],
       },
     },
   },

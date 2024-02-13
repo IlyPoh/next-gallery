@@ -1,9 +1,10 @@
 import { Inter } from 'next/font/google';
+import { getServerSession } from 'next-auth';
 import type { Metadata, Viewport } from 'next';
 
 import Header from '@/components/Header';
-
-import Provider from '@/utils/Provider';
+import QueryProvider from '@/components/QueryProvider';
+import SessionProvider from '@/components/SessionProvider';
 
 import '@/styles/app.scss';
 
@@ -22,18 +23,22 @@ export const metadata: Metadata = {
   description: 'Home page in Gallery App',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession();
+
   return (
     <html lang='en' className='h-full'>
       <body className={`h-full flex flex-col bg-black ${inter.className}`}>
-        <Provider>
-          <Header />
-          <main>{children}</main>
-        </Provider>
+        <SessionProvider session={session}>
+          <QueryProvider>
+            <Header />
+            <main>{children}</main>
+          </QueryProvider>
+        </SessionProvider>
       </body>
     </html>
   );

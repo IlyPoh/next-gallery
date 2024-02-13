@@ -1,7 +1,7 @@
+import { promises as fs } from 'fs';
 import { NextResponse } from 'next/server';
-import { redirect } from 'next/navigation';
 
-import { images } from '@/data/images';
+import { TData } from '@/types';
 
 export async function GET(
   _req: Request,
@@ -11,7 +11,17 @@ export async function GET(
     params: { id: string };
   }
 ) {
-  if (!params.id) redirect('/gallery');
-  const image = images.find(image => image.id === params.id);
-  return NextResponse.json(image);
+  const data: TData = await fs
+    .readFile(process.cwd() + '/src/data/db.json', 'utf-8')
+    .then(JSON.parse);
+  let images = data.images;
+
+  const image = images.find(image => {
+    return image.id === params.id;
+  });
+
+  if (!image)
+    return NextResponse.json({ error: 'Image not found' }, { status: 404 });
+
+  return NextResponse.json({ image: image });
 }

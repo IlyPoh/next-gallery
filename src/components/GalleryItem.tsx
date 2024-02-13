@@ -22,8 +22,8 @@ export default function GalleryItem({ image }: { readonly image: TImage }) {
         className={`${
           loading ? 'skeleton' : ''
         } rounded-xl w-full aspect-video object-cover object-center hover:scale-105 duration-500 ease-in-out`}
-        width={500}
-        height={500}
+        width={400}
+        height={400}
         priority={false}
         onLoad={() => setLoading(false)}
       />

@@ -4,11 +4,9 @@ import { useQuery } from '@tanstack/react-query';
 
 import GalleryItem from './GalleryItem';
 
-import { TImage } from '@/types';
-
 import { getImages } from '@/utils/helpers';
 
-export default function Images({
+export default function ImagesGallery({
   searchParams: { page, search },
 }: {
   readonly searchParams: { page: string; search: string };
@@ -18,14 +16,12 @@ export default function Images({
   const { data, isLoading, error, isError } = useQuery({
     queryKey: ['images', currentPage, search],
     queryFn: () => getImages({ page: currentPage, search: search }),
+    staleTime: 1000 * 60 * 10, // 10 minutes
   });
 
   if (!data) return null;
 
-  const { images } = data as {
-    images: TImage[];
-    totalPages: number;
-  };
+  const { images } = data;
 
   if (isError) {
     return <div>Error: {error.message}</div>;
