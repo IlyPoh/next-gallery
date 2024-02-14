@@ -1,18 +1,18 @@
-import { promises as fs } from 'fs';
 import { NextResponse } from 'next/server';
 
-import { TData } from '@/types';
+import connectMongoDB from '@/libs/mongodb';
+
+import NavLinks from '@/models/navLink';
+
+import { TLink } from '@/types';
 
 export async function GET() {
-  const data: TData = await fs
-    .readFile(process.cwd() + '/src/data/db.json', 'utf-8')
-    .then(JSON.parse);
+  connectMongoDB();
+  let data: TLink[] = await NavLinks.find();
 
-  let headerLinks = data.nav_links;
-
-  if (!data || !headerLinks) {
+  if (!data) {
     return NextResponse.json({ error: 'No data found' }, { status: 404 });
   }
 
-  return NextResponse.json({ nav_links: headerLinks });
+  return NextResponse.json({ nav_links: data });
 }

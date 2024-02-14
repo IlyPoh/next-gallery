@@ -1,7 +1,7 @@
-import { promises as fs } from 'fs';
 import { NextResponse } from 'next/server';
 
-import { TData } from '@/types';
+import connectMongoDB from '@/libs/mongodb';
+import Image from '@/models/image';
 
 export async function GET(
   _req: Request,
@@ -11,14 +11,8 @@ export async function GET(
     params: { id: string };
   }
 ) {
-  const data: TData = await fs
-    .readFile(process.cwd() + '/src/data/db.json', 'utf-8')
-    .then(JSON.parse);
-  let images = data.images;
-
-  const image = images.find(image => {
-    return image.id === params.id;
-  });
+  connectMongoDB();
+  const image = await Image.findOne({ id: params.id });
 
   if (!image)
     return NextResponse.json({ error: 'Image not found' }, { status: 404 });

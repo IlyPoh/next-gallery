@@ -1,14 +1,15 @@
 import { env } from 'process';
-import { promises as fs } from 'fs';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { TData } from '@/types';
+import connectMongoDB from '@/libs/mongodb';
+
+import Image from '@/models/image';
+
+import { TImage } from '@/types';
 
 export async function GET(request: NextRequest) {
-  const data: TData = await fs
-    .readFile(process.cwd() + '/src/data/db.json', 'utf-8')
-    .then(JSON.parse);
-  let images = data.images;
+  connectMongoDB();
+  let images: TImage[] = await Image.find();
 
   const searchParams = request.nextUrl.searchParams;
 
@@ -28,7 +29,7 @@ export async function GET(request: NextRequest) {
     Number(page) * env.ITEMS_PER_PAGE
   );
 
-  if (!data || !images) {
+  if (!images) {
     return NextResponse.json({ error: 'No data found' }, { status: 404 });
   }
 

@@ -1,13 +1,13 @@
 'use client';
 import Image from 'next/image';
-import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 import Modal from './Modal';
 import ZoomLink from './ZoomLink';
 import LoadingSpinner from './LoadingSpinner';
 
-import { getImageById } from '@/utils/helpers';
+import { getImageById, getUser } from '@/utils/helpers';
 
 type TModalProps = Readonly<{
   id: string;
@@ -20,6 +20,12 @@ export default function ModalForImage({ id }: TModalProps) {
     queryFn: () => getImageById(id),
     staleTime: 1000 * 60 * 10, // 10 minutes
   });
+  const { data: userData } = useQuery({
+    queryKey: ['user'],
+    queryFn: () => getUser(),
+  });
+
+  if (!userData || 'error' in userData) return null;
 
   const handleLoad = () => {
     setImageLoaded(true);

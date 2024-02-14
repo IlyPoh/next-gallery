@@ -7,5 +7,7 @@ namespace NodeJS {
 
     GITHUB_ID: string;
     GITHUB_SECRET: string;
+
+    MONGODB_URI: string;
   }
 }

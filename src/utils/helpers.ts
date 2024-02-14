@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-import { TGetImageByIdData, TGetImagesData, TGetNavLinksData } from '@/types';
+import {
+  TGetImageByIdData,
+  TGetImagesData,
+  TGetNavLinksData,
+  TUser,
+} from '@/types';
 
 export async function getImages({
   page,
@@ -50,6 +55,18 @@ export async function getNavLinks() {
     const { data }: TGetNavLinksData = await axios.get(`/api/links/nav`);
 
     return data;
+  } catch (error) {
+    console.error(error);
+
+    return { error: (error as any).response.data as string };
+  }
+}
+
+export async function getUser() {
+  try {
+    const { data } = await axios.get('/api/user');
+
+    return data as TUser;
   } catch (error) {
     console.error(error);
 

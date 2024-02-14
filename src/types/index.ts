@@ -29,3 +29,9 @@ export type TGetImageByIdData = {
 export type TGetNavLinksData = {
   data: { nav_links: TLink[] };
 };
+
+export type TUser = {
+  name: string;
+  email: string;
+  password: string;
+};
