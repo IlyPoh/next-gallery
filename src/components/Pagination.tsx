@@ -24,7 +24,7 @@ export default function Pagination({
   };
 
   return (
-    <section className='flex items-center justify-center mb-6 gap-4 font-bold'>
+    <section className='flex items-center justify-center gap-4 mb-6 font-bold'>
       {totalPages > 1 &&
         Array.from(Array(totalPages).keys()).map((_, index) => {
           const pageNumber = index + 1;

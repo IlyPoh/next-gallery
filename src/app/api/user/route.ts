@@ -1,11 +1,12 @@
-import { getServerSession } from 'next-auth';
+import { v4 as uuidv4 } from 'uuid';
 import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
 
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import User from '@/models/user';
 
 import connectMongoDB from '@/libs/mongodb';
 
-import User from '@/models/user';
+import { authOptions } from '@/utils/authOptions';
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -22,6 +23,7 @@ export async function GET() {
   }
 
   User.create({
+    id: uuidv4(),
     name: session?.user?.name,
     email: session?.user?.email,
     image: session?.user?.image,

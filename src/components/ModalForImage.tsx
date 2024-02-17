@@ -8,6 +8,7 @@ import ZoomLink from './ZoomLink';
 import LoadingSpinner from './LoadingSpinner';
 
 import { getImageById, getUser } from '@/utils/helpers';
+import ImageOptions from './ImageOptions';
 
 type TModalProps = Readonly<{
   id: string;
@@ -37,12 +38,12 @@ export default function ModalForImage({ id }: TModalProps) {
   const { title, imageSrc } = image;
 
   return (
-    <Modal>
+    <Modal navigation>
       {!imageLoaded && <LoadingSpinner />}
       <div
         className={`${
-          imageLoaded ? 'flex' : 'opacity-0'
-        } flex flex-col rounded-xl items-center justify-center backdrop-blur-md text-white text-center mx-2 max-w-[1000px] modal relative transition-opacity duration-500`}
+          imageLoaded ? 'opacity-100' : 'opacity-0'
+        } flex flex-col items-center justify-center text-white text-center max-w-[1000px] relative transition-opacity duration-500`}
       >
         <Image
           alt={title}
@@ -55,6 +56,9 @@ export default function ModalForImage({ id }: TModalProps) {
           onLoad={handleLoad}
         />
         {imageLoaded && <ZoomLink src={imageSrc} />}
+        {imageLoaded && userData.user.id === image.userId && (
+          <ImageOptions id={id} />
+        )}
         <div className='flex flex-col text-center max-w-[1000px] w-full'>
           <h1 className='text-center font-bold m-4'>{title}</h1>
         </div>

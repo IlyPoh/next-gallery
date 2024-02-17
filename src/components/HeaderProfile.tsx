@@ -20,7 +20,7 @@ export default function HeaderProfile() {
       ref={popup}
     >
       <button
-        className='header-profile-button py-2 px-4 bg-black border-primary border-2 text-center rounded-3xl shadow-primary shadow-pink-500 transition-all duration-300 ease'
+        className='px-4 py-2 text-center transition-all duration-300 bg-black border-2 header-profile-button border-primary rounded-3xl shadow-primary shadow-pink-500 ease'
         onClick={() => signOut()}
       >
         Sign out
@@ -30,12 +30,12 @@ export default function HeaderProfile() {
 
   const renderProfile = () => (
     <div
-      className='flex items-center relative cursor-pointer'
+      className='relative flex items-center cursor-pointer'
       onClick={handleClick}
     >
       <div className='mr-4'>{session?.user?.name}</div>
       <Image
-        className='rounded-full w-10 h-10 border-primary border-2'
+        className='w-10 h-10 border-2 rounded-full border-primary'
         src={`${session?.user?.image}`}
         width={50}
         height={50}
@@ -46,7 +46,7 @@ export default function HeaderProfile() {
   );
 
   return (
-    <div className='flex items-center order-2 sm:order-3'>
+    <div className='flex items-center order-2 w-[50%] justify-end sm:order-3 sm:w-[unset]'>
       {session ? (
         renderProfile()
       ) : (

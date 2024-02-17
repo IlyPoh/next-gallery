@@ -4,8 +4,32 @@ import {
   TGetImageByIdData,
   TGetImagesData,
   TGetNavLinksData,
-  TUser,
+  TGetUserData,
 } from '@/types';
+
+export async function getNavLinks() {
+  try {
+    const { data }: TGetNavLinksData = await axios.get(`/api/links/nav`);
+
+    return data;
+  } catch (error) {
+    console.error(error);
+
+    return { error: (error as any).response.data as string };
+  }
+}
+
+export async function getUser() {
+  try {
+    const { data }: TGetUserData = await axios.get('/api/user');
+
+    return data;
+  } catch (error) {
+    console.error(error);
+
+    return { error: (error as any).response.data as string };
+  }
+}
 
 export async function getImages({
   page,
@@ -50,9 +74,9 @@ export async function getImageById(id: string) {
   }
 }
 
-export async function getNavLinks() {
+export async function deleteImage(id: string) {
   try {
-    const { data }: TGetNavLinksData = await axios.get(`/api/links/nav`);
+    const { data } = await axios.delete(`/api/gallery/${id}`);
 
     return data;
   } catch (error) {
@@ -62,11 +86,11 @@ export async function getNavLinks() {
   }
 }
 
-export async function getUser() {
+export async function editImage(id: string, title: string) {
   try {
-    const { data } = await axios.get('/api/user');
+    const { data } = await axios.patch(`/api/gallery/${id}`, { title });
 
-    return data as TUser;
+    return data;
   } catch (error) {
     console.error(error);
 

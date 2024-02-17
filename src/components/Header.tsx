@@ -4,7 +4,7 @@ import HeaderProfile from './HeaderProfile';
 
 export default function Header() {
   return (
-    <header className='container mx-auto my-8 flex items-center justify-between px-4 flex-wrap'>
+    <header className='container flex flex-wrap items-center justify-between my-8'>
       <HeaderLogo />
       <HeaderNav />
       <HeaderProfile />

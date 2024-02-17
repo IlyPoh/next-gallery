@@ -5,14 +5,22 @@ import { type ElementRef, useRef } from 'react';
 
 export default function Modal({
   children,
+  navigation = false,
 }: {
   readonly children: React.ReactNode;
+  readonly navigation?: boolean | (() => void);
 }) {
   const overlay = useRef<ElementRef<'div'>>(null);
   const router = useRouter();
 
   const closeModal = () => {
-    router.back();
+    if (navigation) {
+      if (typeof navigation === 'function') {
+        navigation();
+      } else {
+        router.back();
+      }
+    }
   };
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -27,7 +35,7 @@ export default function Modal({
       onClick={handleClick}
       ref={overlay}
     >
-      {children}
+      <div className='bg-black bg-opacity-60 modal rounded-xl'>{children}</div>
     </div>
   );
 }

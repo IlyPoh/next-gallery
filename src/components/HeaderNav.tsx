@@ -20,7 +20,7 @@ export default function HeaderNav() {
   return (
     <>
       {links && (
-        <nav className='order-3 sm:order-2'>
+        <nav className='order-3 w-full sm:order-2 sm:w-auto'>
           <ul className='flex items-center justify-center gap-8'>
             {links.map(link => {
               const isCurrent = pathname === link.src;

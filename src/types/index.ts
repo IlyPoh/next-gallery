@@ -2,17 +2,13 @@ export type TImage = {
   id: string;
   title: string;
   imageSrc: string;
+  userId: string;
 };
 
 export type TLink = {
   id: string;
   title: string;
   src: string;
-};
-
-export type TData = {
-  nav_links: TLink[];
-  images: TImage[];
 };
 
 export type TGetImagesData = {
@@ -31,7 +27,13 @@ export type TGetNavLinksData = {
 };
 
 export type TUser = {
+  id: string;
   name: string;
   email: string;
   password: string;
+};
+export type TGetUserData = {
+  data: {
+    user: TUser;
+  };
 };
