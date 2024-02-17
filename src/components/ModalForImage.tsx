@@ -1,57 +1,49 @@
 'use client';
 import Image from 'next/image';
-import { useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
+import Modal from './Modal';
 import ZoomLink from './ZoomLink';
 import LoadingSpinner from './LoadingSpinner';
 
-import { getImageById } from '@/utils/helpers';
+import { getImageById, getUser } from '@/utils/helpers';
+import ImageOptions from './ImageOptions';
 
 type TModalProps = Readonly<{
   id: string;
 }>;
 
-export default function Modal({ id }: TModalProps) {
+export default function ModalForImage({ id }: TModalProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const { data: image } = useQuery({
+  const { data } = useQuery({
     queryKey: ['image', id],
     queryFn: () => getImageById(id),
+    staleTime: 1000 * 60 * 10, // 10 minutes
+  });
+  const { data: userData } = useQuery({
+    queryKey: ['user'],
+    queryFn: () => getUser(),
   });
 
-  const overlay = useRef<HTMLDivElement>(null);
-  const router = useRouter();
-
-  const closeModal = () => {
-    router.back();
-  };
-
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (event.target === overlay.current) {
-      closeModal();
-    }
-  };
+  if (!userData || 'error' in userData) return null;
 
   const handleLoad = () => {
     setImageLoaded(true);
   };
 
-  if (!image) return null;
+  if (!data || 'error' in data) return null;
 
+  const { image } = data;
   const { title, imageSrc } = image;
 
   return (
-    <div
-      className='fixed overflow-hidden scroll-smooth inset-0 z-10 bg-opacity-70 backdrop-blur-sm bg-black flex items-center justify-center'
-      onClick={handleClick}
-      ref={overlay}
-    >
+    <Modal navigation>
       {!imageLoaded && <LoadingSpinner />}
       <div
         className={`${
-          imageLoaded ? 'flex' : 'hidden'
-        } flex flex-col rounded-xl items-center justify-center backdrop-blur-md text-white text-center mx-2 max-w-[1000px] modal relative`}
+          imageLoaded ? 'opacity-100' : 'opacity-0'
+        } flex flex-col items-center justify-center text-white text-center max-w-[1000px] relative transition-opacity duration-500`}
       >
         <Image
           alt={title}
@@ -64,10 +56,13 @@ export default function Modal({ id }: TModalProps) {
           onLoad={handleLoad}
         />
         {imageLoaded && <ZoomLink src={imageSrc} />}
+        {imageLoaded && userData.user.id === image.userId && (
+          <ImageOptions id={id} />
+        )}
         <div className='flex flex-col text-center max-w-[1000px] w-full'>
           <h1 className='text-center font-bold m-4'>{title}</h1>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }

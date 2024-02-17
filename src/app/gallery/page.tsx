@@ -1,7 +1,6 @@
-import SearchComponent from '@/components/SearchComponent';
-
 import Pagination from '@/components/Pagination';
 import ImagesGallery from '@/components/ImagesGallery';
+import SearchComponent from '@/components/SearchComponent';
 
 export default async function GalleryPage({
   searchParams,

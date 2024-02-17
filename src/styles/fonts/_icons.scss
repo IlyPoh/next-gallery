@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'icomoon';
-  src: url('../../../public/fonts/icomoon.eot?6z0mo1');
-  src: url('../../../public/fonts/icomoon.eot?6z0mo1#iefix')
+  src: url('../../../public/fonts/icomoon.eot?wa7lws');
+  src: url('../../../public/fonts/icomoon.eot?wa7lws#iefix')
       format('embedded-opentype'),
-    url('../../../public/fonts/icomoon.ttf?6z0mo1') format('truetype'),
-    url('../../../public/fonts/icomoon.woff?6z0mo1') format('woff'),
-    url('../../../public/fonts/icomoon.svg?6z0mo1#icomoon') format('svg');
+    url('../../../public/fonts/icomoon.ttf?wa7lws') format('truetype'),
+    url('../../../public/fonts/icomoon.woff?wa7lws') format('woff'),
+    url('../../../public/fonts/icomoon.svg?wa7lws#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -28,8 +28,11 @@
 }
 
 $icons: (
+  'pencil': '\e905',
   'user': '\e971',
   'search': '\e986',
+  'cog': '\e994',
+  'bin': '\e9ac',
   'cross': '\ea0f',
 );
 

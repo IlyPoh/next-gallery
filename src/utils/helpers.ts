@@ -1,11 +1,35 @@
 import axios from 'axios';
 
-import { TImage } from '@/types';
+import {
+  TGetImageByIdData,
+  TGetImagesData,
+  TGetNavLinksData,
+  TGetUserData,
+} from '@/types';
 
-type TGetImagesProps = {
-  images: TImage[];
-  totalPages: number;
-};
+export async function getNavLinks() {
+  try {
+    const { data }: TGetNavLinksData = await axios.get(`/api/links/nav`);
+
+    return data;
+  } catch (error) {
+    console.error(error);
+
+    return { error: (error as any).response.data as string };
+  }
+}
+
+export async function getUser() {
+  try {
+    const { data }: TGetUserData = await axios.get('/api/user');
+
+    return data;
+  } catch (error) {
+    console.error(error);
+
+    return { error: (error as any).response.data as string };
+  }
+}
 
 export async function getImages({
   page,
@@ -25,9 +49,9 @@ export async function getImages({
 
     const query = queryArray.join('');
 
-    const { data } = await axios.get(`/api/gallery${query}`);
+    const { data }: TGetImagesData = await axios.get(`/api/gallery${query}`);
 
-    return data as TGetImagesProps;
+    return data;
   } catch (error) {
     console.error(error);
 
@@ -40,12 +64,36 @@ export async function getImages({
 
 export async function getImageById(id: string) {
   try {
-    const { data } = await axios.get(`/api/gallery/${id}`);
+    const { data }: TGetImageByIdData = await axios.get(`/api/gallery/${id}`);
 
-    return data as TImage;
+    return data;
   } catch (error) {
     console.error(error);
 
-    return null;
+    return { error: (error as any).response.data as string };
+  }
+}
+
+export async function deleteImage(id: string) {
+  try {
+    const { data } = await axios.delete(`/api/gallery/${id}`);
+
+    return data;
+  } catch (error) {
+    console.error(error);
+
+    return { error: (error as any).response.data as string };
+  }
+}
+
+export async function editImage(id: string, title: string) {
+  try {
+    const { data } = await axios.patch(`/api/gallery/${id}`, { title });
+
+    return data;
+  } catch (error) {
+    console.error(error);
+
+    return { error: (error as any).response.data as string };
   }
 }
