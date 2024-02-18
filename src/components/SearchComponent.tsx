@@ -4,7 +4,7 @@ import { useDebounce } from 'use-debounce';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
-export default function Search() {
+export default function SearchComponent() {
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();

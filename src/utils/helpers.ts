@@ -7,6 +7,14 @@ import {
   TGetUserData,
 } from '@/types';
 
+export const getImageType = (fileType: string) => {
+  if (fileType === 'image/jpeg') {
+    return 'jpg';
+  }
+
+  return 'webp';
+};
+
 export async function getNavLinks() {
   try {
     const { data }: TGetNavLinksData = await axios.get(`/api/links/nav`);
@@ -77,6 +85,18 @@ export async function getImageById(id: string) {
 export async function deleteImage(id: string) {
   try {
     const { data } = await axios.delete(`/api/gallery/${id}`);
+
+    return data;
+  } catch (error) {
+    console.error(error);
+
+    return { error: (error as any).response.data as string };
+  }
+}
+
+export async function addImage(formData: FormData) {
+  try {
+    const { data } = await axios.post(`/api/gallery`, formData);
 
     return data;
   } catch (error) {
