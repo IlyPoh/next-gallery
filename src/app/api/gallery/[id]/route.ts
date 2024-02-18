@@ -1,6 +1,9 @@
+import { join } from 'path';
+import { unlink } from 'fs/promises';
 import { NextResponse } from 'next/server';
 
 import connectMongoDB from '@/libs/mongodb';
+
 import Image from '@/models/image';
 
 export async function GET(
@@ -34,7 +37,12 @@ export async function DELETE(
   if (!image)
     return NextResponse.json({ error: 'Image not found' }, { status: 404 });
 
-  return NextResponse.json({ image: image });
+  await unlink(join(process.cwd(), '/public/', image.imageSrc));
+
+  return NextResponse.json({
+    success: true,
+    message: 'Image successfully deleted. Redirecting...',
+  });
 }
 
 export async function PATCH(
@@ -55,5 +63,8 @@ export async function PATCH(
   if (!image)
     return NextResponse.json({ error: 'Image not found' }, { status: 404 });
 
-  return NextResponse.json({ image: image });
+  return NextResponse.json({
+    success: true,
+    message: 'Image successfully updated. Updating the page...',
+  });
 }

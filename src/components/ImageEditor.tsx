@@ -27,19 +27,19 @@ export default function ImageEditor({
   const router = useRouter();
   const [imageTitle, setImageTitle] = useState('');
 
-  const schema = z
-    .object({
-      title: z.string().min(1, 'Title is required'),
-    })
-    .refine(
-      data => {
-        return data.title !== imageData.title;
-      },
-      {
-        message: 'Title must be different from the current one',
-        path: ['title'],
-      }
-    );
+  const schema = z.object({
+    title: z
+      .string()
+      .min(1, 'Title is required')
+      .refine(
+        title => {
+          return title !== imageData.title;
+        },
+        {
+          message: 'Title must be different from the current one',
+        }
+      ),
+  });
   type TFormValues = z.infer<typeof schema>;
 
   const {
@@ -51,14 +51,20 @@ export default function ImageEditor({
   });
 
   const handleEdit = async (data: TFormValues) => {
-    await editImage(imageData.id, data.title).then(() => {
-      handleEditorOpen();
-      setMessage('Image title updated. Redirecting...');
+    const res = await editImage(imageData.id, data.title);
+
+    if (res.error) {
+      setMessage(res.error);
+      return;
+    }
+
+    if (res.success) {
+      setMessage(res.message);
       setTimeout(() => {
         setMessage('');
         router.push(`/gallery/${imageData.id}`);
       }, 2000);
-    });
+    }
   };
 
   return (

@@ -37,10 +37,21 @@ export default function ImageOptions({ id }: Readonly<ImageOptionsProps>) {
   };
 
   const handleDelete = async () => {
-    await deleteImage(id).then(() => {
-      setMessage('Image deleted. Redirecting...');
-      setTimeout(() => router.push('/gallery'), 2000);
-    });
+    const res = await deleteImage(id);
+
+    if (res.error) {
+      setMessage(res.error);
+      return;
+    }
+
+    if (res.success) {
+      setMessage(res.message);
+      setTimeout(() => {
+        setMessage('');
+        setEditorOpen(false);
+        router.push('/gallery');
+      }, 2000);
+    }
   };
 
   return (

@@ -3,8 +3,8 @@
 
   @include display_flex($align: center, $justify: center);
   position: relative;
-  width: var(--size);
-  height: var(--size);
+  width: calc(var(--size) * 0.9);
+  height: calc(var(--size) * 0.9);
 
   div {
     --div-size: calc(var(--size) * 0.75);
