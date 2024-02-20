@@ -35,7 +35,7 @@ export default function HeaderProfile() {
     >
       <div className='mr-4'>{session?.user?.name}</div>
       <Image
-        className='w-10 h-10 border-2 rounded-full border-primary'
+        className='size-10 border-2 rounded-full border-primary'
         src={`${session?.user?.image}`}
         width={50}
         height={50}
