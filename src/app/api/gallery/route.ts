@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'No data found' }, { status: 404 });
   }
 
-  return NextResponse.json({ images: result, totalPages: pageCount });
+  return NextResponse.json({ data: { images: result, totalPages: pageCount } });
 }
 
 export async function POST(request: NextRequest) {

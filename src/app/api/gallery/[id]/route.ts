@@ -20,7 +20,7 @@ export async function GET(
   if (!image)
     return NextResponse.json({ error: 'Image not found' }, { status: 404 });
 
-  return NextResponse.json({ image: image });
+  return NextResponse.json({ data: { image: image } });
 }
 
 export async function DELETE(

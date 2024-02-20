@@ -52,6 +52,17 @@ Make sure you have the following installed on your machine:
    GITHUB_SECRET=your-github-client-secret
    ```
 
+3. Generate a secret for NextAuth.js. For example, using the following command in your terminal:
+
+   ```bash
+   openssl rand -base64 32
+   ```
+
+4. Copy the generated secret and add it to your .env.local file:
+   ```bash
+   NEXTAUTH_SECRET=your_generated_secret
+   ```
+
 ## Running the Application
 
 ```bash

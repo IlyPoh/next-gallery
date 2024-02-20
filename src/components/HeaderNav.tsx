@@ -15,7 +15,7 @@ export default function HeaderNav() {
 
   if (!data || 'error' in data) return null;
 
-  const { nav_links: links } = data;
+  const { nav_links: links } = data.data;
 
   return (
     <>

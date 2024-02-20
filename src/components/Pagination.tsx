@@ -19,9 +19,7 @@ export default function Pagination({
 
   if (!data) return null;
 
-  const { totalPages } = data as {
-    totalPages: number;
-  };
+  const { totalPages } = data.data;
 
   return (
     <section className='flex items-center justify-center gap-4 mb-6 font-bold'>

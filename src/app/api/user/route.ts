@@ -19,7 +19,7 @@ export async function GET() {
   const user = await User.findOne({ email: session?.user?.email });
 
   if (user) {
-    return NextResponse.json({ user: user });
+    return NextResponse.json({ data: { user: user } });
   }
 
   User.create({
@@ -29,5 +29,5 @@ export async function GET() {
     image: session?.user?.image,
   });
 
-  return NextResponse.json({ user: session?.user });
+  return NextResponse.json({ data: { user: session?.user } });
 }

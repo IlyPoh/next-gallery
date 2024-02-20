@@ -15,29 +15,42 @@ export const getImageType = (fileType: string) => {
   return 'webp';
 };
 
-export async function getNavLinks() {
+const handleRequest = async (request: Promise<any>) => {
   try {
-    const { data }: TGetNavLinksData = await axios.get(`/api/links/nav`);
-
+    const { data } = await request;
     return data;
   } catch (error) {
     console.error(error);
-
     return { error: (error as any).response.data as string };
   }
-}
+};
 
-export async function getUser() {
-  try {
-    const { data }: TGetUserData = await axios.get('/api/user');
+export const getNavLinks = (): Promise<TGetNavLinksData | { error: string }> =>
+  handleRequest(axios.get<TGetNavLinksData>('/api/links/nav'));
 
-    return data;
-  } catch (error) {
-    console.error(error);
+export const getUser = (): Promise<TGetUserData | { error: string }> =>
+  handleRequest(axios.get<TGetUserData>('/api/user'));
 
-    return { error: (error as any).response.data as string };
-  }
-}
+export const getImageById = (
+  id: string
+): Promise<TGetImageByIdData | { error: string }> =>
+  handleRequest(axios.get<TGetImageByIdData>(`/api/gallery/${id}`));
+
+export const deleteImage = (
+  id: string
+): Promise<{ success: boolean; message: string } | { error: string }> =>
+  handleRequest(axios.delete(`/api/gallery/${id}`));
+
+export const addImage = (
+  formData: FormData
+): Promise<{ success: boolean; message: string } | { error: string }> =>
+  handleRequest(axios.post(`/api/gallery`, formData));
+
+export const editImage = (
+  id: string,
+  title: string
+): Promise<{ success: boolean; message: string } | { error: string }> =>
+  handleRequest(axios.patch(`/api/gallery/${id}`, { title }));
 
 export async function getImages({
   page,
@@ -57,63 +70,14 @@ export async function getImages({
 
     const query = queryArray.join('');
 
-    const { data }: TGetImagesData = await axios.get(`/api/gallery${query}`);
+    const { data } = await axios.get<TGetImagesData>(`/api/gallery${query}`);
 
     return data;
   } catch (error) {
     console.error(error);
 
     return {
-      images: [],
-      totalPages: 0,
+      data: { images: [], totalPages: 0 },
     };
-  }
-}
-
-export async function getImageById(id: string) {
-  try {
-    const { data }: TGetImageByIdData = await axios.get(`/api/gallery/${id}`);
-
-    return data;
-  } catch (error) {
-    console.error(error);
-
-    return { error: (error as any).response.data as string };
-  }
-}
-
-export async function deleteImage(id: string) {
-  try {
-    const { data } = await axios.delete(`/api/gallery/${id}`);
-
-    return data;
-  } catch (error) {
-    console.error(error);
-
-    return { error: (error as any).response.data as string };
-  }
-}
-
-export async function addImage(formData: FormData) {
-  try {
-    const { data } = await axios.post(`/api/gallery`, formData);
-
-    return data;
-  } catch (error) {
-    console.error(error);
-
-    return { error: (error as any).response.data as string };
-  }
-}
-
-export async function editImage(id: string, title: string) {
-  try {
-    const { data } = await axios.patch(`/api/gallery/${id}`, { title });
-
-    return data;
-  } catch (error) {
-    console.error(error);
-
-    return { error: (error as any).response.data as string };
   }
 }

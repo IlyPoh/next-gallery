@@ -21,7 +21,7 @@ export default function ImagesGallery({
 
   if (!data) return null;
 
-  const { images } = data;
+  const { images } = data.data;
 
   if (isError) {
     return <div>Error: {error.message}</div>;

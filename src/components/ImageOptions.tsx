@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { type Dispatch, type SetStateAction, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 
@@ -28,30 +28,26 @@ export default function ImageOptions({ id }: Readonly<ImageOptionsProps>) {
 
   if (!imageData || 'error' in imageData) return null;
 
-  const handleOptionsOpen = () => {
-    setToolsOpen(!toolsOpen);
-  };
+  const toggleState = (stateSetter: Dispatch<SetStateAction<boolean>>) => () =>
+    stateSetter(state => !state);
 
-  const handleEditorOpen = () => {
-    setEditorOpen(!editorOpen);
-  };
+  const handleOptionsOpen = toggleState(setToolsOpen);
+  const handleEditorOpen = toggleState(setEditorOpen);
 
   const handleDelete = async () => {
     const res = await deleteImage(id);
 
-    if (res.error) {
+    if ('error' in res) {
       setMessage(res.error);
       return;
     }
 
-    if (res.success) {
-      setMessage(res.message);
-      setTimeout(() => {
-        setMessage('');
-        setEditorOpen(false);
-        router.push('/gallery');
-      }, 2000);
-    }
+    setMessage(res.message);
+    setTimeout(() => {
+      setMessage('');
+      setEditorOpen(false);
+      router.push('/gallery');
+    }, 2000);
   };
 
   return (
@@ -101,7 +97,7 @@ export default function ImageOptions({ id }: Readonly<ImageOptionsProps>) {
       {editorOpen && (
         <ImageEditor
           handleEditorOpen={handleEditorOpen}
-          imageData={imageData.image}
+          imageData={imageData.data.image}
           setMessage={setMessage}
         />
       )}
