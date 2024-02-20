@@ -37,7 +37,7 @@ export default function ImageOptions({ id }: Readonly<ImageOptionsProps>) {
   const handleDelete = async () => {
     const res = await deleteImage(id);
 
-    if (res.error) {
+    if ('error' in res) {
       setMessage(res.error);
       return;
     }
