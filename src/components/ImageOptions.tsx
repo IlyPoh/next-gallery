@@ -97,7 +97,7 @@ export default function ImageOptions({ id }: Readonly<ImageOptionsProps>) {
       {editorOpen && (
         <ImageEditor
           handleEditorOpen={handleEditorOpen}
-          imageData={imageData.image}
+          imageData={imageData.data.image}
           setMessage={setMessage}
         />
       )}
