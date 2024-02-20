@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { useQuery } from '@tanstack/react-query';
 
 import ZoomLink from '@/components/ZoomLink';
@@ -15,6 +16,7 @@ export default function GalleryItemPage({
 }: {
   readonly params: { id: string };
 }) {
+  const session = useSession();
   const [imageLoaded, setImageLoaded] = useState(false);
   const { data: imageData } = useQuery({
     queryKey: ['image', id],
@@ -23,6 +25,7 @@ export default function GalleryItemPage({
   const { data: userData } = useQuery({
     queryKey: ['user'],
     queryFn: () => getUser(),
+    enabled: !!session.data?.user,
   });
 
   if (!imageData) return null;
@@ -34,7 +37,9 @@ export default function GalleryItemPage({
       </div>
     );
 
-  const { userId, title, imageSrc } = imageData.image;
+  const { userId, title, imageSrc } = imageData.data.image;
+
+  const imageClasses = `${!imageLoaded && 'skeleton'} w-full h-auto rounded-xl`;
 
   return (
     <div className='container py-8'>
@@ -43,18 +48,21 @@ export default function GalleryItemPage({
           <Image
             alt={title}
             src={imageSrc}
-            className={`${!imageLoaded && 'skeleton'} w-full h-auto rounded-xl`}
+            className={imageClasses}
             width={2000}
             height={2000}
             priority
             quality={100}
             onLoad={() => setImageLoaded(true)}
           />
-          {imageLoaded && <ZoomLink src={imageSrc} />}
-          {imageLoaded &&
-            userData &&
-            !('error' in userData) &&
-            userData?.user.id === userId && <ImageOptions id={id} />}
+          {imageLoaded && (
+            <>
+              <ZoomLink src={imageSrc} />
+              {userData &&
+                !('error' in userData) &&
+                userData?.data.user.id === userId && <ImageOptions id={id} />}
+            </>
+          )}
         </div>
         <div className='flex flex-col gap-2 text-center'>
           <h1 className='font-bold text-center'>

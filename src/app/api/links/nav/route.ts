@@ -14,5 +14,5 @@ export async function GET() {
     return NextResponse.json({ error: 'No data found' }, { status: 404 });
   }
 
-  return NextResponse.json({ nav_links: data });
+  return NextResponse.json({ data: { nav_links: data } });
 }

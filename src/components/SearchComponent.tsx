@@ -32,21 +32,22 @@ export default function SearchComponent() {
     if (query) router.push(`/gallery?page=1&search=${query}`);
   }, [params.id, page, query, router, search]);
 
+  const commonClasses = open ? 'open' : 'closed';
+
   return (
     <div className='absolute left-0 right-0 md:right-auto search-component'>
       <div
-        className={`${
-          open ? 'open' : 'closed'
-        } relative flex items-center px-6 py-2 bg-gray-300 rounded-3xl md:px-8 bg-opacity-60 focus-visible:bg-opacity-100`}
+        className={`${commonClasses} relative flex items-center px-6 py-2
+        bg-gray-300 rounded-3xl md:px-8 bg-opacity-60 focus-visible:bg-opacity-100`}
       >
         <input
           value={text}
           onChange={e => setText(e.target.value)}
           type='text'
           placeholder='Search'
-          className={`${
-            open ? 'open' : 'closed'
-          } outline-none text-lg w-full text-black bg-transparent placeholder:text-gray-900 cursor-pointer focus-visible:cursor-text transition-opacity duration-500 ease-in-out`}
+          className={`${commonClasses} outline-none text-lg w-full text-black
+          bg-transparent placeholder:text-gray-900 cursor-pointer duration-500
+          focus-visible:cursor-text transition-opacity ease-in-out`}
         />
         <button
           className='absolute flex items-center justify-center left-1 md:left-2'
@@ -63,7 +64,8 @@ export default function SearchComponent() {
           <button
             className={`${
               text.length > 0 && 'opacity-100'
-            } absolute right-1 md:right-2 flex items-center justify-center opacity-0 transition-opacity duration-300 ease-in-out`}
+            } absolute right-1 md:right-2 flex items-center justify-center
+            opacity-0 transition-opacity duration-300 ease-in-out`}
             onClick={handleClear}
           >
             <i className='text-black icon-bin'></i>

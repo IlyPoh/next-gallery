@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { useQuery } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -33,6 +34,7 @@ const schema = z.object({
 type TFormValues = z.infer<typeof schema>;
 
 export default function AddImage() {
+  const session = useSession();
   const router = useRouter();
   const [popupOpen, setPopupOpen] = useState(false);
   const [image, setImage] = useState<File>();
@@ -47,8 +49,10 @@ export default function AddImage() {
   });
   const { data: userData } = useQuery({
     queryKey: ['user'],
-    queryFn: async () => getUser(),
+    queryFn: () => getUser(),
+    enabled: !!session.data?.user,
   });
+  console.log('🚀 ~ AddImage ~ userData:', userData);
 
   const imageUrl = useMemo(() => {
     if (image) {
@@ -67,11 +71,11 @@ export default function AddImage() {
     const formData = new FormData();
     formData.set('file', data.image.item(0) as File);
     formData.set('title', data.title);
-    formData.set('userId', userData?.user.id);
+    formData.set('userId', userData?.data.user.id);
 
     const res = await addImage(formData);
 
-    if (res.error) {
+    if ('error' in res) {
       console.error(res.error);
       setMessage(res.error);
       setTimeout(() => {
@@ -79,7 +83,7 @@ export default function AddImage() {
       }, 2000);
     }
 
-    if (res.success) {
+    if ('success' in res) {
       setMessage(`${res.message}. Redirecting...`);
       setTitle('');
       setImage(undefined);

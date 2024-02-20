@@ -32,12 +32,8 @@ export default function ImageEditor({
       .string()
       .min(1, 'Title is required')
       .refine(
-        title => {
-          return title !== imageData.title;
-        },
-        {
-          message: 'Title must be different from the current one',
-        }
+        title => title !== imageData.title,
+        'Title must be different from the current one'
       ),
   });
   type TFormValues = z.infer<typeof schema>;
@@ -53,18 +49,17 @@ export default function ImageEditor({
   const handleEdit = async (data: TFormValues) => {
     const res = await editImage(imageData.id, data.title);
 
-    if (res.error) {
+    if ('error' in res) {
       setMessage(res.error);
       return;
     }
 
-    if (res.success) {
-      setMessage(res.message);
-      setTimeout(() => {
-        setMessage('');
-        router.push(`/gallery/${imageData.id}`);
-      }, 2000);
-    }
+    handleEditorOpen();
+    setMessage(res.message);
+    setTimeout(() => {
+      setMessage('');
+      router.push(`/gallery/${imageData.id}`);
+    }, 2000);
   };
 
   return (

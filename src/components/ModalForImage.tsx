@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { useQuery } from '@tanstack/react-query';
 
 import Modal from './Modal';
@@ -15,18 +16,19 @@ type TModalProps = Readonly<{
 }>;
 
 export default function ModalForImage({ id }: TModalProps) {
+  const session = useSession();
   const [imageLoaded, setImageLoaded] = useState(false);
   const { data } = useQuery({
     queryKey: ['image', id],
     queryFn: () => getImageById(id),
     staleTime: 1000 * 60 * 10, // 10 minutes
   });
+
   const { data: userData } = useQuery({
     queryKey: ['user'],
     queryFn: () => getUser(),
+    enabled: !!session.data?.user,
   });
-
-  if (!userData || 'error' in userData) return null;
 
   const handleLoad = () => {
     setImageLoaded(true);
@@ -34,16 +36,17 @@ export default function ModalForImage({ id }: TModalProps) {
 
   if (!data || 'error' in data) return null;
 
-  const { image } = data;
+  const { image } = data.data;
   const { title, imageSrc } = image;
+  const commonClasses = imageLoaded ? 'opacity-100' : 'opacity-0';
 
   return (
     <Modal navigation>
       {!imageLoaded && <LoadingSpinner />}
       <div
-        className={`${
-          imageLoaded ? 'opacity-100' : 'opacity-0'
-        } flex flex-col items-center justify-center text-white text-center max-w-[1000px] relative transition-opacity duration-500`}
+        className={`${commonClasses} flex flex-col items-center justify-center
+        text-white text-center max-w-[1000px] relative transition-opacity
+        duration-500`}
       >
         <Image
           alt={title}
@@ -55,9 +58,15 @@ export default function ModalForImage({ id }: TModalProps) {
           priority
           onLoad={handleLoad}
         />
-        {imageLoaded && <ZoomLink src={imageSrc} />}
-        {imageLoaded && userData.user.id === image.userId && (
-          <ImageOptions id={id} />
+        {imageLoaded && (
+          <>
+            <ZoomLink src={imageSrc} />
+            {userData &&
+              !('error' in userData) &&
+              userData?.data.user.id === image.userId && (
+                <ImageOptions id={id} />
+              )}
+          </>
         )}
         <div className='flex flex-col text-center max-w-[1000px] w-full'>
           <h1 className='text-center font-bold m-4'>{title}</h1>

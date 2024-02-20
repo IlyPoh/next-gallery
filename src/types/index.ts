@@ -11,29 +11,24 @@ export type TLink = {
   src: string;
 };
 
-export type TGetImagesData = {
-  data: {
-    images: TImage[];
-    totalPages: number;
-  };
-};
-
-export type TGetImageByIdData = {
-  data: { image: TImage };
-};
-
-export type TGetNavLinksData = {
-  data: { nav_links: TLink[] };
-};
-
 export type TUser = {
   id: string;
   name: string;
   email: string;
   password: string;
 };
-export type TGetUserData = {
-  data: {
-    user: TUser;
-  };
+
+type TResponseData<T> = {
+  data: T;
 };
+
+export type TGetImagesData = TResponseData<{
+  images: TImage[];
+  totalPages: number;
+}>;
+
+export type TGetImageByIdData = TResponseData<{ image: TImage }>;
+
+export type TGetNavLinksData = TResponseData<{ nav_links: TLink[] }>;
+
+export type TGetUserData = TResponseData<{ user: TUser }>;

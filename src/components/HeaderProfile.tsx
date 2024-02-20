@@ -9,7 +9,7 @@ export default function HeaderProfile() {
   const [popupOpen, setPopupOpen] = useState(false);
 
   const handleClick = () => {
-    setPopupOpen(!popupOpen);
+    setPopupOpen(prev => !prev);
   };
 
   const renderPopup = () => (
