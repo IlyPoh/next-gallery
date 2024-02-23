@@ -1,9 +1,9 @@
-'use client';
-import Link from 'next/link';
-import Image from 'next/image';
-import { useState } from 'react';
+"use client";
+import Link from "next/link";
+import Image from "next/image";
+import { useState } from "react";
 
-import { TImage } from '@/types';
+import { TImage } from "@/types";
 
 export default function GalleryItem({ image }: { readonly image: TImage }) {
   const [loading, setLoading] = useState(true);
@@ -12,7 +12,7 @@ export default function GalleryItem({ image }: { readonly image: TImage }) {
   return (
     <Link
       key={id}
-      className='overflow-hidden rounded-xl aspect-video w-full relative group/galleryItem'
+      className="group/galleryItem relative aspect-video w-full overflow-hidden rounded-xl"
       href={`/gallery/${id}`}
       scroll={false}
     >
@@ -20,14 +20,14 @@ export default function GalleryItem({ image }: { readonly image: TImage }) {
         alt={title}
         src={imageSrc}
         className={`${
-          loading ? 'skeleton' : ''
-        } rounded-xl w-full aspect-video object-cover object-center hover:scale-105 duration-500 ease-in-out`}
+          loading ? "skeleton" : ""
+        } aspect-video w-full rounded-xl object-cover object-center duration-500 ease-in-out hover:scale-105`}
         width={400}
         height={400}
         priority={false}
         onLoad={() => setLoading(false)}
       />
-      <div className='absolute bottom-0 inset-x-0 bg-black bg-opacity-40 backdrop-blur-sm py-2 px-4 opacity-0 group-hover/galleryItem:opacity-100 transition-opacity duration-500 text-center'>
+      <div className="absolute inset-x-0 bottom-0 bg-black bg-opacity-40 px-4 py-2 text-center opacity-0 backdrop-blur-sm transition-opacity duration-500 group-hover/galleryItem:opacity-100">
         {title}
       </div>
     </Link>

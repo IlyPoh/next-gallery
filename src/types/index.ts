@@ -18,17 +18,19 @@ export type TUser = {
   password: string;
 };
 
+// Response types
 type TResponseData<T> = {
   data: T;
 };
 
-export type TGetImagesData = TResponseData<{
+export type TApiResponse<T> = TResponseData<T> | { error: string };
+export type TSuccessResponse = { success: boolean; message: string };
+
+export type TApiResponseWithoutData = TApiResponse<TSuccessResponse>;
+export type TGetImagesData = TApiResponse<{
   images: TImage[];
   totalPages: number;
 }>;
-
-export type TGetImageByIdData = TResponseData<{ image: TImage }>;
-
-export type TGetNavLinksData = TResponseData<{ nav_links: TLink[] }>;
-
-export type TGetUserData = TResponseData<{ user: TUser }>;
+export type TGetImageByIdData = TApiResponse<{ image: TImage }>;
+export type TGetNavLinksData = TApiResponse<{ nav_links: TLink[] }>;
+export type TGetUserData = TApiResponse<{ user: TUser }>;

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useQuery } from '@tanstack/react-query';
+import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
 
-import { getImages } from '@/utils/helpers';
+import { getImages } from "@/utils/helpers";
 
 export default function Pagination({
   searchParams: { page, search },
@@ -12,17 +12,17 @@ export default function Pagination({
 }) {
   const currentPage = Number(page) || 1;
 
-  const { data } = useQuery({
-    queryKey: ['images', currentPage, search],
+  const { data: imagesData } = useQuery({
+    queryKey: ["images", currentPage, search],
     queryFn: () => getImages({ page: currentPage, search: search }),
   });
 
-  if (!data) return null;
+  if (!imagesData || "error" in imagesData) return null;
 
-  const { totalPages } = data.data;
+  const { totalPages } = imagesData.data;
 
   return (
-    <section className='flex items-center justify-center gap-4 mb-6 font-bold'>
+    <section className="mb-6 flex items-center justify-center gap-4 font-bold">
       {totalPages > 1 &&
         Array.from(Array(totalPages).keys()).map((_, index) => {
           const pageNumber = index + 1;
@@ -37,14 +37,14 @@ export default function Pagination({
               scroll={false}
               className={`${
                 currentPage === pageNumber
-                  ? 'text-primary pointer-events-none'
-                  : 'text-secondary hover:text-white'
+                  ? "pointer-events-none text-primary"
+                  : "text-secondary hover:text-white"
               } transition-colors duration-300 ease-in-out`}
             >
               {pageNumber}
             </Link>
           );
-        })}{' '}
+        })}{" "}
     </section>
   );
 }

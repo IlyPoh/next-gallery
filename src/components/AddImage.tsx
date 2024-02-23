@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import { z } from 'zod';
-import Image from 'next/image';
-import { useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import { useQuery } from '@tanstack/react-query';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from "zod";
+import Image from "next/image";
+import { useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import Modal from './Modal';
-import LoadingRing from './LoadingRing';
+import Modal from "./Modal";
+import LoadingRing from "./LoadingRing";
 
-import { addImage, getUser } from '@/utils/helpers';
+import { addImage, getUser } from "@/utils/helpers";
 
 const ACCEPTED_IMAGE_TYPES = [
-  'image/jpeg',
-  'image/jpg',
-  'image/png',
-  'image/webp',
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
 ];
 
 const schema = z.object({
@@ -26,9 +26,9 @@ const schema = z.object({
     (files: FileList) => {
       return ACCEPTED_IMAGE_TYPES.includes(files[0].type);
     },
-    { message: 'Image type should be jpg, jpeg, png or webp' }
+    { message: "Image type should be jpg, jpeg, png or webp" },
   ),
-  title: z.string().min(1, 'Title is required'),
+  title: z.string().min(1, "Title is required"),
 });
 
 type TFormValues = z.infer<typeof schema>;
@@ -38,8 +38,8 @@ export default function AddImage() {
   const router = useRouter();
   const [popupOpen, setPopupOpen] = useState(false);
   const [image, setImage] = useState<File>();
-  const [title, setTitle] = useState('');
-  const [message, setMessage] = useState('');
+  const [title, setTitle] = useState("");
+  const [message, setMessage] = useState("");
   const {
     register,
     handleSubmit,
@@ -48,72 +48,71 @@ export default function AddImage() {
     resolver: zodResolver(schema),
   });
   const { data: userData } = useQuery({
-    queryKey: ['user'],
+    queryKey: ["user"],
     queryFn: () => getUser(),
     enabled: !!session.data?.user,
   });
-  console.log('🚀 ~ AddImage ~ userData:', userData);
 
   const imageUrl = useMemo(() => {
     if (image) {
       return URL.createObjectURL(image);
     }
-    return '';
+    return "";
   }, [image]);
 
   const handleOpen = () => {
-    setPopupOpen(prev => !prev);
+    setPopupOpen((prev) => !prev);
   };
 
-  if (!userData || 'error' in userData) return null;
+  if (!userData || "error" in userData) return null;
 
   const onImageSubmit = async (data: TFormValues) => {
     const formData = new FormData();
-    formData.set('file', data.image.item(0) as File);
-    formData.set('title', data.title);
-    formData.set('userId', userData?.data.user.id);
+    formData.set("file", data.image.item(0) as File);
+    formData.set("title", data.title);
+    formData.set("userId", userData?.data.user.id);
 
     const res = await addImage(formData);
 
-    if ('error' in res) {
+    if ("error" in res) {
       console.error(res.error);
       setMessage(res.error);
       setTimeout(() => {
-        setMessage('');
+        setMessage("");
       }, 2000);
     }
 
-    if ('success' in res) {
-      setMessage(`${res.message}. Redirecting...`);
-      setTitle('');
+    if ("data" in res) {
+      setMessage(`${res.data.message}. Redirecting...`);
+      setTitle("");
       setImage(undefined);
 
       setTimeout(() => {
-        setMessage('');
+        setMessage("");
         setPopupOpen(false);
-        router.push('/gallery');
+        router.push("/gallery");
       }, 2000);
     }
   };
 
   return (
-    <div className='flex items-center justify-end absolute right-1 md:right-2'>
+    <div className="absolute right-1 flex items-center justify-end md:right-2">
       <button
         onClick={handleOpen}
-        title='Add new image'
-        className='flex items-center justify-center hover:-rotate-90 transition-transform duration-300 ease-in-out'
+        title="Add new image"
+        className="flex items-center justify-center transition-transform duration-300 ease-in-out hover:-rotate-90"
       >
-        <i className='icon-plus'></i>
+        <i className="icon-plus"></i>
       </button>
       {popupOpen && (
         <Modal navigation={handleOpen}>
           <form
-            className='flex flex-col p-2 gap-4 rounded-xl items-center'
+            className="flex flex-col items-center gap-4 rounded-xl p-2"
             onSubmit={handleSubmit(onImageSubmit)}
           >
             {image && (
               <Image
-                className='rounded-xl max-w-[400px] w-full'
+                className="w-full max-w-[400px] rounded-xl"
                 src={imageUrl}
                 width={800}
                 height={800}
@@ -121,37 +120,37 @@ export default function AddImage() {
               />
             )}
             <input
-              {...register('title', { required: true })}
-              type='text'
-              name='title'
-              placeholder='Image title'
+              {...register("title", { required: true })}
+              type="text"
+              name="title"
+              placeholder="Image title"
               value={title}
-              onChange={e => setTitle(e.target.value)}
-              className='py-2 px-4 outline-none border-gray-600 rounded-xl w-full bg-white bg-opacity-10'
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full rounded-xl border-gray-600 bg-white bg-opacity-10 px-4 py-2 outline-none"
             />
             {errors.title && (
-              <div className='text-red-500'>{errors.title.message}</div>
+              <div className="text-red-500">{errors.title.message}</div>
             )}
-            <div className='flex justify-between w-full max-w-[400px]'>
-              <label className='add-image-label'>
+            <div className="flex w-full max-w-[400px] justify-between">
+              <label className="add-image-label">
                 <input
-                  {...register('image', { required: true })}
-                  type='file'
-                  name='image'
-                  accept={ACCEPTED_IMAGE_TYPES.join(',')}
-                  onChange={e => setImage(e.target.files?.[0])}
+                  {...register("image", { required: true })}
+                  type="file"
+                  name="image"
+                  accept={ACCEPTED_IMAGE_TYPES.join(",")}
+                  onChange={(e) => setImage(e.target.files?.[0])}
                 />
               </label>
               <button
-                className='bg-white bg-opacity-10 rounded-xl px-6 py-2
-                  hover:bg-primary hover:text-black transition-colors duration-300
-                    ease-in-out text-sm ml-4'
-                title='Add image'
+                className="ml-4 rounded-xl bg-white bg-opacity-10 px-6
+                  py-2 text-sm transition-colors duration-300
+                    ease-in-out hover:bg-primary hover:text-black"
+                title="Add image"
               >
                 {isSubmitting ? (
                   <LoadingRing size={1} />
                 ) : (
-                  <i className='icon-plus'></i>
+                  <i className="icon-plus"></i>
                 )}
               </button>
             </div>

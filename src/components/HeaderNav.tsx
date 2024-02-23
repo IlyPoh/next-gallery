@@ -1,37 +1,37 @@
-'use client';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 
-import { getNavLinks } from '@/utils/helpers';
+import { getNavLinks } from "@/utils/helpers";
 
 export default function HeaderNav() {
   const pathname = usePathname();
 
-  const { data } = useQuery({
-    queryKey: ['nav_links'],
+  const { data: navLinksData } = useQuery({
+    queryKey: ["nav_links"],
     queryFn: () => getNavLinks(),
   });
 
-  if (!data || 'error' in data) return null;
+  if (!navLinksData || "error" in navLinksData) return null;
 
-  const { nav_links: links } = data.data;
+  const { nav_links: links } = navLinksData.data;
 
   return (
     <>
       {links && (
-        <nav className='order-3 w-full sm:order-2 sm:w-auto'>
-          <ul className='flex items-center justify-center gap-8'>
-            {links.map(link => {
+        <nav className="order-3 w-full sm:order-2 sm:w-auto">
+          <ul className="flex items-center justify-center gap-8">
+            {links.map((link) => {
               const isCurrent = pathname === link.src;
 
               return (
                 <li key={link.title}>
                   <Link
-                    className={`hover:text-white transition-colors duration-300 ease-in-out ${
+                    className={`transition-colors duration-300 ease-in-out hover:text-white ${
                       isCurrent
-                        ? 'text-primary pointer-events-none'
-                        : 'text-secondary'
+                        ? "pointer-events-none text-primary"
+                        : "text-secondary"
                     }`}
                     href={link.src}
                   >

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
 
 type TProps = {
   children: React.ReactNode;
@@ -6,8 +6,8 @@ type TProps = {
 };
 
 export const metadata: Metadata = {
-  title: 'Gallery',
-  description: 'Gallery',
+  title: "Gallery",
+  description: "Gallery",
 };
 
 export default async function GalleryLayout({

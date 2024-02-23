@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { z } from 'zod';
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from "zod";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import Modal from './Modal';
-import LoadingRing from './LoadingRing';
+import Modal from "./Modal";
+import LoadingRing from "./LoadingRing";
 
-import { TImage } from '@/types';
+import { TImage } from "@/types";
 
-import { editImage } from '@/utils/helpers';
+import { editImage } from "@/utils/helpers";
 
 type ImageEditorProps = {
   imageData: TImage;
@@ -25,17 +25,18 @@ export default function ImageEditor({
   setMessage,
 }: Readonly<ImageEditorProps>) {
   const router = useRouter();
-  const [imageTitle, setImageTitle] = useState('');
+  const [imageTitle, setImageTitle] = useState("");
 
   const schema = z.object({
     title: z
       .string()
-      .min(1, 'Title is required')
+      .min(1, "Title is required")
       .refine(
-        title => title !== imageData.title,
-        'Title must be different from the current one'
+        (title) => title !== imageData.title,
+        "Title must be different from the current one",
       ),
   });
+
   type TFormValues = z.infer<typeof schema>;
 
   const {
@@ -49,15 +50,15 @@ export default function ImageEditor({
   const handleEdit = async (data: TFormValues) => {
     const res = await editImage(imageData.id, data.title);
 
-    if ('error' in res) {
+    if ("error" in res) {
       setMessage(res.error);
       return;
     }
 
     handleEditorOpen();
-    setMessage(res.message);
+    setMessage(res.data.message);
     setTimeout(() => {
-      setMessage('');
+      setMessage("");
       router.push(`/gallery/${imageData.id}`);
     }, 2000);
   };
@@ -66,32 +67,32 @@ export default function ImageEditor({
     <Modal navigation={handleEditorOpen}>
       <form
         onSubmit={handleSubmit(handleEdit)}
-        className='px-6 py-4 flex flex-col items-center gap-4 min-w-[400px]'
+        className="flex min-w-[400px] flex-col items-center gap-4 px-6 py-4"
       >
         <div>
-          <span className='text-gray-500 mr-2'>Current title:</span>
+          <span className="mr-2 text-gray-500">Current title:</span>
           {imageData.title}
         </div>
         <input
-          {...register('title')}
-          type='text'
+          {...register("title")}
+          type="text"
           value={imageTitle}
-          onChange={e => setImageTitle(e.target.value)}
-          placeholder='Image title'
-          className={`py-2 px-4 outline-none bg-transparent border-gray-600
-            border-2 rounded-xl focus-visible:border-primary w-full
-            transition-colors duration-300 ease-in-out
-            ${errors.title && 'border-red-500 focus-visible:border-red-500'}`}
+          onChange={(e) => setImageTitle(e.target.value)}
+          placeholder="Image title"
+          className={`w-full rounded-xl border-2 border-gray-600 bg-transparent
+            px-4 py-2 outline-none transition-colors
+            duration-300 ease-in-out focus-visible:border-primary
+            ${errors.title && "border-red-500 focus-visible:border-red-500"}`}
         />
         {errors.title && (
-          <div className='text-red-500'>{errors.title.message}</div>
+          <div className="text-red-500">{errors.title.message}</div>
         )}
         <button
-          className='bg-gray-600 bg-opacity-70 rounded-xl px-6 py-2 
-            hover:bg-primary hover:text-black transition-colors duration-300
-              ease-in-out'
+          className="rounded-xl bg-gray-600 bg-opacity-70 px-6 py-2 
+            transition-colors duration-300 ease-in-out hover:bg-primary
+              hover:text-black"
         >
-          {isSubmitting ? <LoadingRing size={1.5} /> : 'Change image title'}
+          {isSubmitting ? <LoadingRing size={1.5} /> : "Change image title"}
         </button>
       </form>
     </Modal>

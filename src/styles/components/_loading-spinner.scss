@@ -1,5 +1,5 @@
-@import '../base/mixins';
-@import '../base/extends';
+@import "../base/mixins";
+@import "../base/extends";
 
 .loading-spinner {
   position: absolute;
@@ -31,7 +31,7 @@
 
     div:after {
       $size: 7px;
-      content: ' ';
+      content: " ";
       display: block;
       position: absolute;
 

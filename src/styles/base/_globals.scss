@@ -8,7 +8,7 @@ body {
 }
 
 h1 {
-  @apply font-bold text-2xl sm:text-3xl md:text-4xl;
+  @apply text-2xl font-bold sm:text-3xl md:text-4xl;
 }
 
 .collapse {
@@ -41,18 +41,18 @@ h1 {
 }
 
 .add-image-label {
-  @apply relative p-6 flex items-center;
+  @apply relative flex items-center p-6;
 
   &:before {
-    content: 'Choose file';
+    content: "Choose file";
 
-    @apply absolute left-0 bg-white bg-opacity-10 rounded-xl py-2
-    hover:bg-primary hover:text-black transition-colors duration-300
-    ease-in-out text-nowrap cursor-pointer w-full h-full flex items-center
-    justify-center;
+    @apply absolute left-0 flex h-full w-full cursor-pointer
+    items-center justify-center text-nowrap rounded-xl
+    bg-white bg-opacity-10 py-2 transition-colors duration-300 ease-in-out hover:bg-primary
+    hover:text-black;
   }
 
   input {
-    @apply opacity-0 max-w-[200px] h-0;
+    @apply h-0 max-w-[200px] opacity-0;
   }
 }

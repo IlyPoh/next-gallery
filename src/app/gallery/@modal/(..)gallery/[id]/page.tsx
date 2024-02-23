@@ -1,4 +1,4 @@
-import ModalForImage from '@/components/ModalForImage';
+import ModalForImage from "@/components/ModalForImage";
 
 export default function ModalGalleryItemPage({
   params: { id },
